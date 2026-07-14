@@ -1,50 +1,74 @@
-import PrimaryButton from '@/Components/PrimaryButton';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import GuestLayout from '@/Layouts/GuestLayout'
+
+import { Head, Link, useForm } from '@inertiajs/react'
+
+import { Button } from '@/Components/ui/button'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/Components/ui/card'
 
 export default function VerifyEmail({ status }) {
-    const { post, processing } = useForm({});
+    const { post, processing } = useForm({})
 
     const submit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        post(route('verification.send'));
-    };
+        post(route('verification.send'))
+    }
 
     return (
         <GuestLayout>
-            <Head title="Email Verification" />
+            <Head title="Verify Email" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                Thanks for signing up! Before getting started, could you verify
-                your email address by clicking on the link we just emailed to
-                you? If you didn't receive the email, we will gladly send you
-                another.
-            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Verify your email</CardTitle>
 
-            {status === 'verification-link-sent' && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
-                </div>
-            )}
+                    <CardDescription>
+                        Before continuing, please verify your email address by
+                        clicking the link we sent to your inbox.
+                    </CardDescription>
+                </CardHeader>
 
-            <form onSubmit={submit}>
-                <div className="mt-4 flex items-center justify-between">
-                    <PrimaryButton disabled={processing}>
-                        Resend Verification Email
-                    </PrimaryButton>
+                <CardContent>
+                    {status === 'verification-link-sent' && (
+                        <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-900 dark:bg-green-950/30 dark:text-green-400">
+                            A new verification link has been sent to your email
+                            address.
+                        </div>
+                    )}
 
-                    <Link
-                        href={route('logout')}
-                        method="post"
-                        as="button"
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    <form
+                        onSubmit={submit}
+                        className="space-y-6"
                     >
-                        Log Out
-                    </Link>
-                </div>
-            </form>
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={processing}
+                        >
+                            {processing
+                                ? 'Sending...'
+                                : 'Resend Verification Email'}
+                        </Button>
+
+                        <div className="text-center">
+                            <Link
+                                href={route('logout')}
+                                method="post"
+                                as="button"
+                                className="text-sm text-muted-foreground hover:text-foreground hover:underline"
+                            >
+                                Log out
+                            </Link>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </GuestLayout>
-    );
+    )
 }

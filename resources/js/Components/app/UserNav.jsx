@@ -1,3 +1,4 @@
+import {Link, router} from '@inertiajs/react'
 import {
     ChevronDown,
     LogOut,
@@ -14,11 +15,11 @@ import {
 } from '@/Components/ui/dropdown-menu'
 
 export default function UserNav({
-    user = {
-        name: 'John Doe',
-        email: 'john@example.com',
-    },
-}) {
+                                    user = {
+                                        name: 'John Doe',
+                                        email: 'john@example.com',
+                                    },
+                                }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger
@@ -57,7 +58,10 @@ export default function UserNav({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => router.post(route('logout'))}
+                >
                     <LogOut className="h-4 w-4" />
                     <span>Logout</span>
                 </DropdownMenuItem>

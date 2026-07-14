@@ -1,8 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import {Head} from "@inertiajs/react";
 
 export default function Index() {
     return (
         <AuthenticatedLayout title="Dashboard">
+            <Head title="Dashboard" />
             <div className="space-y-6">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight">

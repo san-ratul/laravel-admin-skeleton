@@ -1,55 +1,91 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
+import GuestLayout from '@/Layouts/GuestLayout'
+
+import { Head, useForm } from '@inertiajs/react'
+
+import { Button } from '@/Components/ui/button'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/Components/ui/card'
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+} from '@/Components/ui/field'
+import { Input } from '@/Components/ui/input'
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
         password: '',
-    });
+    })
 
     const submit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         post(route('password.confirm'), {
             onFinish: () => reset('password'),
-        });
-    };
+        })
+    }
 
     return (
         <GuestLayout>
             <Head title="Confirm Password" />
 
-            <div className="mb-4 text-sm text-gray-600">
-                This is a secure area of the application. Please confirm your
-                password before continuing.
-            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Confirm your password</CardTitle>
 
-            <form onSubmit={submit}>
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                    <CardDescription>
+                        This is a secure area of the application. Please confirm
+                        your password before continuing.
+                    </CardDescription>
+                </CardHeader>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
+                <CardContent>
+                    <form
+                        onSubmit={submit}
+                        className="space-y-6"
+                    >
+                        <FieldGroup>
+                            <Field>
+                                <FieldLabel htmlFor="password">
+                                    Password
+                                </FieldLabel>
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    value={data.password}
+                                    autoComplete="current-password"
+                                    autoFocus
+                                    required
+                                    aria-invalid={!!errors.password}
+                                    onChange={(e) =>
+                                        setData('password', e.target.value)
+                                    }
+                                />
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Confirm
-                    </PrimaryButton>
-                </div>
-            </form>
+                                <FieldError>
+                                    {errors.password}
+                                </FieldError>
+                            </Field>
+                        </FieldGroup>
+
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={processing}
+                        >
+                            {processing ? 'Confirming...' : 'Confirm Password'}
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
         </GuestLayout>
-    );
+    )
 }
