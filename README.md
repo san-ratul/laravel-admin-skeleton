@@ -1,58 +1,287 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Admin Skeleton
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A production-ready Laravel Admin Skeleton designed to accelerate development of modern web applications.
 
-## About Laravel
+This project is **not an admin template**. It is a reusable, opinionated Laravel starter kit that provides a clean architecture, consistent conventions, and production-ready foundations for future projects.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Philosophy
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Every decision in this project prioritizes:
 
-## Learning Laravel
+- Simplicity
+- Maintainability
+- Reusability
+- Consistency
+- Laravel Best Practices
+- Production Readiness
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The goal is to eliminate repetitive setup work so every new project starts with a solid foundation.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+# Features
 
-## Agentic Development
+## Authentication
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- Login
+- Registration
+- Password Reset
+- Email Verification
+- Profile Management
+- Password Update
+- Avatar Upload
 
-```bash
-composer require laravel/boost --dev
+## Admin Panel
 
-php artisan boost:install
+- Responsive Sidebar
+- Responsive Header
+- Dark / Light Theme
+- User Navigation
+- Flash Messages
+- Shared Layouts
+
+## API Foundation
+
+- Standardized API Responses
+- API Response Builder
+- Business Error Codes
+- Global Exception Handling
+- Pagination Responses
+- Trace ID Support
+- Consistent JSON Structure
+
+## Testing
+
+- API Response Tests
+- Validation Tests
+- Pagination Tests
+
+---
+
+# Technology Stack
+
+## Backend
+
+- Laravel 13
+- PHP 8.3+
+- MySQL
+- Inertia.js
+
+## Frontend
+
+- React 19
+- JavaScript
+- Tailwind CSS v4
+- shadcn/ui
+- Base UI
+- Ziggy
+- Axios
+- Sonner
+- next-themes
+- Vite 8
+
+## Planned
+
+- Laravel Sanctum
+- Spatie Laravel Permission
+- Scramble API Documentation
+
+---
+
+# Project Structure
+
+```
+app/
+├── Actions
+├── Enums
+├── Helpers
+├── Services
+├── Support
+└── Traits
+
+resources/js/
+├── Components
+├── Layouts
+├── Pages
+├── Providers
+├── hooks
+├── services
+├── constants
+└── utils
+
+routes/
+├── web.php
+├── auth.php
+├── admin.php
+└── api.php
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+# Installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Clone the repository
 
-## Code of Conduct
+```bash
+git clone <repository-url>
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Install dependencies
 
-## Security Vulnerabilities
+```bash
+composer install
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Create environment
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Generate application key
+
+```bash
+php artisan key:generate
+```
+
+Run migrations
+
+```bash
+php artisan migrate
+```
+
+Start development server
+
+```bash
+composer run dev
+```
+
+---
+
+# Available Commands
+
+Development
+
+```bash
+composer run dev
+```
+
+Run Tests
+
+```bash
+php artisan test
+```
+
+Build Assets
+
+```bash
+npm run build
+```
+
+Code Formatting
+
+```bash
+vendor/bin/pint
+```
+
+---
+
+# API Response Format
+
+## Success
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "code": "SUCCESS",
+    "message": "Success.",
+    "data": {},
+    "meta": {
+        "trace_id": "..."
+    }
+}
+```
+
+## Validation Error
+
+```json
+{
+    "success": false,
+    "status": 422,
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed.",
+    "errors": {},
+    "meta": {
+        "trace_id": "..."
+    }
+}
+```
+
+## Pagination
+
+```json
+{
+    "success": true,
+    "status": 200,
+    "code": "SUCCESS",
+    "message": "Paginated.",
+    "data": [],
+    "meta": {
+        "trace_id": "...",
+        "pagination": {
+            "current_page": 1,
+            "last_page": 1,
+            "per_page": 10,
+            "total": 10,
+            "from": 1,
+            "to": 10,
+            "has_more_pages": false
+        }
+    }
+}
+```
+
+---
+
+# Development Principles
+
+- Work file-by-file
+- Follow Laravel conventions
+- Avoid unnecessary abstractions
+- Prefer reusable components
+- Keep the architecture simple
+- Build → Test → Commit
+
+---
+
+# Roadmap
+
+## v1.0
+
+- Authentication
+- Admin Layout
+- Profile Management
+- Theme Support
+- API Foundation
+- Testing
+
+## Future
+
+- Scramble API Documentation
+- Laravel Sanctum
+- Spatie Permission
+- User Management
+- Role Management
+- Permission Management
+- Settings Module
+- Activity Log
+
+---
+
+# License
+
+This project is open-sourced software licensed under the MIT License.
