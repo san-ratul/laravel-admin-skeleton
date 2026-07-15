@@ -12,9 +12,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/Components/ui/sidebar'
+import useAuth from "@/hooks/useAuth.js";
 
 export default function AppSidebar() {
     const { url } = usePage()
+    const {user, initials, hasAvatar, avatarUrl} = useAuth();
 
     const menus = [
         {
@@ -84,17 +86,27 @@ export default function AppSidebar() {
                             size="lg"
                             tooltip="Account"
                         >
-                            <div className="flex aspect-square size-8 items-center justify-center rounded-full bg-muted font-medium">
-                                A
+                            <div className="flex aspect-square size-8 items-center justify-center rounded-full bg-muted font-medium overflow-hidden">
+                                {hasAvatar ? (
+                                    <img
+                                        src={avatarUrl}
+                                        alt={user.name}
+                                        className="h-full w-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-xl font-semibold">
+                            {initials}
+                        </span>
+                                )}
                             </div>
 
                             <div className="grid flex-1 text-left leading-tight">
                                 <span className="truncate text-sm font-medium">
-                                    Admin
+                                    { user.name }
                                 </span>
 
                                 <span className="truncate text-xs text-muted-foreground">
-                                    admin@example.com
+                                    { user.email }
                                 </span>
                             </div>
                         </SidebarMenuButton>

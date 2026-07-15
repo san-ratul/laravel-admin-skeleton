@@ -1,4 +1,4 @@
-import {Link, router} from '@inertiajs/react'
+import {Link, router, usePage} from '@inertiajs/react'
 import {
     ChevronDown,
     LogOut,
@@ -13,13 +13,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu'
+import {useMemo} from "react";
+import useAuth from "@/hooks/useAuth.js";
 
-export default function UserNav({
-                                    user = {
-                                        name: 'John Doe',
-                                        email: 'john@example.com',
-                                    },
-                                }) {
+export default function UserNav() {
+    const { user, hasAvatar, avatarUrl, initials } = useAuth();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger
@@ -30,8 +29,18 @@ export default function UserNav({
                     />
                 }
             >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
-                    {user.name.charAt(0).toUpperCase()}
+                <div className="flex p-1 h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground overflow-hidden">
+                    {hasAvatar ? (
+                        <img
+                            src={avatarUrl}
+                            alt={user.name}
+                            className="h-full w-full object-cover"
+                        />
+                    ) : (
+                        <span className="text-xl font-semibold">
+                            {initials}
+                        </span>
+                    )}
                 </div>
 
                 <div className="hidden text-left md:block">
@@ -51,7 +60,11 @@ export default function UserNav({
                 align="end"
                 className="w-56"
             >
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    render={
+                        <Link href={route('admin.profile.edit')} />
+                    }
+                >
                     <User className="h-4 w-4" />
                     <span>Profile</span>
                 </DropdownMenuItem>
