@@ -42,6 +42,65 @@ The goal is to eliminate repetitive setup work so every new project starts with 
 - Flash Messages
 - Shared Layouts
 
+## Roles & Permissions
+
+- Role CRUD (create, update, delete)
+- Multiple roles per user
+- Permission attach / detach per role
+- Super Admin role with full bypass
+- `permission` / `role` route middleware
+- Gate-based permission checks (`$user->can('users.create')`)
+- Shared permissions with the frontend (`useAuth().can()`)
+- Read-only permission registry (permissions are never deletable)
+
+### Permission Command
+
+Create full CRUD permissions for a key:
+
+```bash
+php artisan permission:create users
+# Creates: users.view, users.create, users.update, users.delete
+```
+
+Options:
+
+```bash
+# Custom actions only
+php artisan permission:create invoices --actions=view,export,pay
+
+# Assign the created permissions to roles
+php artisan permission:create users --role=editor,manager
+```
+
+The command is idempotent — existing keys are skipped, never duplicated.
+
+### Permission Seeder
+
+The `PermissionSeeder` truncates the permissions table (clearing role
+relations first) and rebuilds it from the `config/permissions.php`
+registry. Keys are unique — re-running never inserts duplicates.
+
+```bash
+php artisan db:seed --class=PermissionSeeder
+```
+
+Run `php artisan migrate --seed` on a fresh install to seed permissions,
+roles, and the initial super admin account (`admin@example.com` /
+`password`). Add new keys to `config/permissions.php` so they survive a
+re-seed.
+
+### Protecting Routes
+
+```php
+Route::get('/posts', ...)->middleware('permission:posts.view');
+
+// Any-of multiple permissions
+Route::post('/posts', ...)->middleware('permission:posts.create,posts.update');
+
+// By role slug
+Route::get('/audit', ...)->middleware('role:super-admin');
+```
+
 ## API Foundation
 
 - Standardized API Responses
@@ -85,7 +144,6 @@ The goal is to eliminate repetitive setup work so every new project starts with 
 ## Planned
 
 - Laravel Sanctum
-- Spatie Laravel Permission
 - Scramble API Documentation
 
 ---
@@ -273,10 +331,6 @@ vendor/bin/pint
 
 - Scramble API Documentation
 - Laravel Sanctum
-- Spatie Permission
-- User Management
-- Role Management
-- Permission Management
 - Settings Module
 - Activity Log
 

@@ -41,6 +41,14 @@ class HandleInertiaRequests extends Middleware
                     'email' => $user->email,
                     'email_verified_at' => $user->email_verified_at,
                     'avatar_url' => $user->avatar_url,
+                    'roles' => $user->roles->map(fn ($role) => [
+                        'id' => $role->id,
+                        'name' => $role->name,
+                        'slug' => $role->slug,
+                        'is_super' => $role->is_super,
+                    ]),
+                    'permissions' => $user->permissionKeys()->values(),
+                    'is_super_admin' => $user->isSuperAdmin(),
                 ] : null,
             ],
 

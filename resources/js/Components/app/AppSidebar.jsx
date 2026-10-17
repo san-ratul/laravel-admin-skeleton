@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react'
-import { LayoutDashboard } from 'lucide-react'
+import { KeyRound, LayoutDashboard, ShieldCheck, Users } from 'lucide-react'
 
 import {
     Sidebar,
@@ -7,6 +7,7 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -16,13 +17,35 @@ import useAuth from "@/hooks/useAuth.js";
 
 export default function AppSidebar() {
     const { url } = usePage()
-    const {user, initials, hasAvatar, avatarUrl} = useAuth();
+    const { user, initials, hasAvatar, avatarUrl, can } = useAuth();
 
     const menus = [
         {
             title: 'Dashboard',
             href: route('admin.dashboard'),
             icon: LayoutDashboard,
+            can: true,
+        },
+    ]
+
+    const accessMenus = [
+        {
+            title: 'Users',
+            href: route('admin.users.index'),
+            icon: Users,
+            can: can('users.view'),
+        },
+        {
+            title: 'Roles',
+            href: route('admin.roles.index'),
+            icon: ShieldCheck,
+            can: can('roles.view'),
+        },
+        {
+            title: 'Permissions',
+            href: route('admin.permissions.index'),
+            icon: KeyRound,
+            can: can('permissions.view'),
         },
     ]
 
@@ -59,24 +82,59 @@ export default function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {menus.map((menu) => (
-                                <SidebarMenuItem key={menu.title}>
-                                    <SidebarMenuButton
-                                        tooltip={menu.title}
-                                        isActive={url === menu.href}
-                                        render={
-                                            <Link href={menu.href} />
-                                        }
-                                    >
-                                        <menu.icon />
+                            {menus
+                                .filter((menu) => menu.can)
+                                .map((menu) => (
+                                    <SidebarMenuItem key={menu.title}>
+                                        <SidebarMenuButton
+                                            tooltip={menu.title}
+                                            isActive={url === menu.href}
+                                            render={
+                                                <Link href={menu.href} />
+                                            }
+                                        >
+                                            <menu.icon />
 
-                                        <span>{menu.title}</span>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                                            <span>{menu.title}</span>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+
+                {accessMenus.some((menu) => menu.can) && (
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Access Control</SidebarGroupLabel>
+
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {accessMenus
+                                    .filter((menu) => menu.can)
+                                    .map((menu) => (
+                                        <SidebarMenuItem key={menu.title}>
+                                            <SidebarMenuButton
+                                                tooltip={menu.title}
+                                                isActive={
+                                                    url === menu.href ||
+                                                    url.startsWith(
+                                                        `${menu.href}/`
+                                                    )
+                                                }
+                                                render={
+                                                    <Link href={menu.href} />
+                                                }
+                                            >
+                                                <menu.icon />
+
+                                                <span>{menu.title}</span>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                )}
             </SidebarContent>
 
             <SidebarFooter className="border-t">
