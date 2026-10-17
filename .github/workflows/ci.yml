@@ -26,6 +26,12 @@ jobs:
           coverage: none
           extensions: mbstring, dom, fileinfo, sqlite3, pdo_sqlite
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
       - name: Copy Environment File
         run: cp .env.example .env
 
@@ -41,6 +47,12 @@ jobs:
 
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build Assets
+        run: npm run build
 
       - name: Generate Application Key
         run: php artisan key:generate
