@@ -6,6 +6,7 @@ use App\Models\Permission;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Throwable;
 
 class PermissionRegistrar
 {
@@ -43,23 +44,37 @@ class PermissionRegistrar
     /**
      * All registered permission keys, cached.
      *
+     * Returns an empty set when the database is not available yet,
+     * e.g. during `composer install` on a fresh clone before the
+     * database has been created or migrated.
+     *
      * @return array<int, string>
      */
     public function permissionKeys(): array
     {
         [$key, $ttl] = $this->cacheConfig();
 
+        if (! $this->databaseReady()) {
+            return [];
+        }
+
         return Cache::remember(
             $key,
             now()->addMinutes($ttl),
-            function () {
-                if (! Schema::hasTable('permissions')) {
-                    return [];
-                }
-
-                return Permission::query()->pluck('key')->all();
-            },
+            fn () => Permission::query()->pluck('key')->all(),
         );
+    }
+
+    /**
+     * Determine whether the permissions table is readable.
+     */
+    protected function databaseReady(): bool
+    {
+        try {
+            return Schema::hasTable('permissions');
+        } catch (Throwable) {
+            return false;
+        }
     }
 
     /**
